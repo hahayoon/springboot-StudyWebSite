@@ -40,7 +40,7 @@ public class AccountService {
     }
 
 
-    private void sendSignUpConfirmEmail(Account newAccount) {
+    public void sendSignUpConfirmEmail(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage(); //이메일 보내기
         mailMessage.setSubject("스터디 올래, 회원가입 인증"); // 이메일 제목
         mailMessage.setText("/check-email-token?token="+ newAccount.getEmailCheckToken() +
@@ -71,7 +71,6 @@ public class AccountService {
        SecurityContextHolder.getContext().setAuthentication(token);
     }
 }
-
 
 
 

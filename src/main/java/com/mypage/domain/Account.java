@@ -56,8 +56,12 @@ public class Account {
 
     private boolean studyUpdatedByWeb;  //갱신정보 웹으로 받을것인가.
 
+    private LocalDateTime emailCheckTokenGeneratedAt;
+
+
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
+        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
     }
 
 
@@ -68,5 +72,9 @@ public class Account {
 
     public boolean isValidToken(String token) {
         return this.emailCheckToken.equals(token);
+    }
+
+    public boolean canSendConfirmEmail() {
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 }
