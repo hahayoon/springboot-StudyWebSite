@@ -63,7 +63,8 @@ public class AccountService {
 
     public void login(Account account) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                account.getNickname(),  //principal
+                new UserAccount(account),  //principal
+               // account.getNickname(),
                 account.getPassword(),   //password
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));  //권한
 
