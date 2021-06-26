@@ -73,8 +73,7 @@ class AccountControllerTest {
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
 
 
+
     }
-
-
 
 }

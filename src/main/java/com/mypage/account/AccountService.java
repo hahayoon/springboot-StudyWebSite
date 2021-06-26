@@ -4,10 +4,16 @@ import com.mypage.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,11 +51,23 @@ public class AccountService {
 
 
     @Transactional
-    public void processNewAccount(SignUpForm signUpForm) {
+    public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);  //ctrl+ alt + m -> 드래그해서 매소드만들기
         newAccount.generateEmailCheckToken();
         sendSignUpConfirmEmail(newAccount);
 
+
+        return newAccount;
+
+    }
+
+    public void login(Account account) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+                account.getNickname(),  //principal
+                account.getPassword(),   //password
+                List.of(new SimpleGrantedAuthority("ROLE_USER")));  //권한
+
+       SecurityContextHolder.getContext().setAuthentication(token);
     }
 }
 
