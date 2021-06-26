@@ -15,6 +15,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
+                .mvcMatchers("/node_modules/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()); //static 은 허용.
     }
 
@@ -25,8 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 ,"/email-login", "/check-email-login" , "/login-link" ).permitAll()
                 .mvcMatchers(HttpMethod.GET,"/profile/*").permitAll()
                 .anyRequest().authenticated();
-
-
 
 
     }
