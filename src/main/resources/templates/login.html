@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:replace="fragments.html :: head"></head>
+
+<body class="bg-light">
+<div th:replace="fragments.html :: main-nav"></div>
+<div class="container">
+    <div class="py-5 text-center">
+        <h2> 스터디 올레 </h2>
+    </div>
+
+    <div class="row justify-content-center">
+        <div th:if="${param.error}" class="alert alert-danger" role="alert"> <!--param.error == true 이면 실행됨. -->
+            <p>이메일 (또는 닉네임) 과 패스워드가 정확하지 않습니다. </p>
+            <p> 또는 확인되지 않은 이메일을 사용했습니다. 이메일을 확인해 주세요. </p>
+            <p> 확인후 다시입력하시거나 <a href="#" th:href="@{/findpassword}" 패스워드 찾기></a> 를 이용하세요. </p>
+        </div>
+
+        <!--action에서 post로  가는 /login 을 spring security가 처리를 해준다  로그인 패스워드 값으로 알아서 처리함.
+        그냥처리하는것은 아니고 데베에 있는정보를 참고해서 가져감
+        데베에 정보를 조회 할 수 있는 interface userDetailsService 를 해줘야함. -->
+        <form class="needs-validation col-sm-6" action="#" th:action="@{/login}" method="post" novalidate>
+            <div class="form-grop">
+                <label for="username">이메일 또는 닉네임 </label>
+                <input id="username" type="text" name="username" class="form-control"
+                       placeholder="your@eamil" aria-describedby="emailHelp" required>
+                <small id="emailHelp" class="form-text text-muted">
+                    가입할떄 사용한 이메일 또는 닉네임을 입력하세요.
+                </small>
+                <small class="invalid-feedback">이메일을 입력하세요. </small>
+            </div>
+
+            <div class="form-grop">
+                <label for="password">패스워드 </label>
+                <input id="password" type="text" name="password" class="form-control"
+                       aria-describedby="passwordHelp" required>
+                <small id="passwordHelp" class="form-text text-muted">
+                    패스워드가 기억나지 않는다면, <a href="#" th:href="@{/emaillogin}">패스워드없이 로그인하기 </a>
+                </small>
+                <small class="invalid-feedback">패스워드를 입력하세요. </small>
+            </div>
+
+
+            <div class="form-group">
+                <button class="btn btn-success btn-block" type="submit"
+                        aria-describedby="submitHelp"> 로그인
+                </button>
+                <small id="submotHelp" class="form-text text-muted">
+                    스터디올래에 처음 오신거라면 <a href="#" th:href="@{/sign-up}">계정을 먼저 만드세요. </a>
+                </small>
+            </div>
+        </form>
+
+
+    </div>
+
+    <div th:replace="fragments.html :: footer"></div>
+    <script th:replace="fragments.html :: form-validation"></script>
+</div>
+</body>
+</html>

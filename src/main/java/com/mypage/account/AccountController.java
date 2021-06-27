@@ -103,6 +103,16 @@ public class AccountController {
         accountService.sendSignUpConfirmEmail(account);
         return "redirect:/";
 
-    }}
+    }
+
+    @GetMapping("/dropdown")
+    public String dropdown(){
+        return "account/dropdown";
+    }
+
+
+
+
+}
 
 
