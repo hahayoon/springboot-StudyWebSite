@@ -10,9 +10,8 @@ import org.springframework.ui.Model;
 
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -54,38 +53,37 @@ public class AccountController {
     }
 
     @GetMapping("/check-email-token")
-    public String checkEmailToken(String token , String email , Model model) {
-        Account account =accountRepository.findByEmail(email); //이메일에 해당하는 유저가 있는지 확인
+    public String checkEmailToken(String token, String email, Model model) {
+        Account account = accountRepository.findByEmail(email); //이메일에 해당하는 유저가 있는지 확인
 
-        String view ="account/checked-Email";
+        String view = "account/checked-Email";
 
-        if(account == null){
-            model.addAttribute("error","wrong email");
+        if (account == null) {
+            model.addAttribute("error", "wrong email");
             return view;
 
         }
 
-        if(!account.isValidToken(token)){  //true가 아니면
-       //f(!account.getEmailCheckToken().equals(token)){
-           model.addAttribute("error","wrong email");
-           return view;
+        if (!account.isValidToken(token)) {  //true가 아니면
+            //f(!account.getEmailCheckToken().equals(token)){
+            model.addAttribute("error", "wrong email");
+            return view;
 
-       }
+        }
 
-       account.completeSignUp();
+        account.completeSignUp();
         accountService.login(account);
 
-       model.addAttribute("numberOfUser",accountRepository.count());
-       model.addAttribute("nickname",account.getNickname());
-      return view;
+        model.addAttribute("numberOfUser", accountRepository.count());
+        model.addAttribute("nickname", account.getNickname());
+        return view;
 
     }
 
 
-
     @GetMapping("/check-email")
-    public String checkEmail(@CurrentUser Account account, Model model){
-        model.addAttribute("email",account.getEmail());
+    public String checkEmail(@CurrentUser Account account, Model model) {
+        model.addAttribute("email", account.getEmail());
 
 
         return "account/check-Email";
@@ -93,10 +91,10 @@ public class AccountController {
 
 
     @GetMapping("resend-confirm-email")
-    public String resendConfirmEmail(@CurrentUser Account account, Model model){
-        if(!account.canSendConfirmEmail()){
+    public String resendConfirmEmail(@CurrentUser Account account, Model model) {
+        if (!account.canSendConfirmEmail()) {
             model.addAttribute("error", "인증이메일은 1시간에 한번만 전송할수있습니다.");
-            model.addAttribute("email" ,account.getEmail());
+            model.addAttribute("email", account.getEmail());
             return "account/check-Email";
         }
 
@@ -106,13 +104,26 @@ public class AccountController {
     }
 
     @GetMapping("/dropdown")
-    public String dropdown(){
+    public String dropdown() {
         return "account/dropdown";
     }
 
 
+    @GetMapping("/profile/{nickname}")
+    public String viewProfile(@PathVariable String nickname, Model model, @CurrentUser Account account) {
+        Account byNickname = accountRepository.findByNickname(nickname);
+        if (nickname == null) {
+            throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
+        }
 
-
+        model.addAttribute(byNickname);
+        model.addAttribute("isOwner", byNickname.equals(account));
+        return "account/profile";
+    }
 }
+
+
+
+
 
 

@@ -31,7 +31,7 @@ public class Account {
 
     private String emailCheckToken; //이메일 저장 토큰값
 
-    private LocalDateTime joinAt;  //가입시간
+    private LocalDateTime joinedAt;  //가입시간
 
     private String bio;  //프로필 자기소개
 
@@ -67,7 +67,7 @@ public class Account {
 
     public void completeSignUp() {
         this.emailVerified = true;
-        this.joinAt = LocalDateTime.now();
+        this.joinedAt = LocalDateTime.now();
     }
 
     public boolean isValidToken(String token) {
