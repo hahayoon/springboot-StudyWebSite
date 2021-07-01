@@ -71,7 +71,7 @@ public class AccountController {
 
         }
 
-        account.completeSignUp();
+        accountService.completeSignUp(account);
         accountService.login(account);
 
         model.addAttribute("numberOfUser", accountRepository.count());
@@ -116,7 +116,8 @@ public class AccountController {
             throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
         }
 
-        model.addAttribute(byNickname);
+        model.addAttribute(byNickname);  //account라는 이름으로 들어감!!!  model.addAttribute("account",byNickname);
+                                         // 기본값으로 캐멀케이스 로 들어감 (소문자시작)
         model.addAttribute("isOwner", byNickname.equals(account));
         return "account/profile";
     }

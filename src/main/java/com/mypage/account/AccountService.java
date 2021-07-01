@@ -16,10 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
@@ -38,7 +40,7 @@ public class AccountService implements UserDetailsService {
                 .studyUpdatedByWeb(true)
                 .build();
 
-        Account newAccount = accountRepository.save(account);
+        Account newAccount = accountRepository.save(account);  //accountrepository 자동 트랜젝션 extends jparepository
         return newAccount;
     }
 
@@ -53,7 +55,7 @@ public class AccountService implements UserDetailsService {
     }
 
 
-    @Transactional
+
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);  //ctrl+ alt + m -> 드래그해서 매소드만들기
         newAccount.generateEmailCheckToken();
@@ -77,6 +79,7 @@ public class AccountService implements UserDetailsService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickname);
         if(account == null){
@@ -89,6 +92,12 @@ public class AccountService implements UserDetailsService {
         }
 
         return new UserAccount(account);  //계정이 있으면 계정을 넘겨줘
+    }
+
+    public void completeSignUp(Account account) {
+        account.completeSignUp();
+        login(account);
+
     }
 }
 
