@@ -1,6 +1,7 @@
 package com.mypage.account;
 
 import com.mypage.domain.Account;
+import com.mypage.settings.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -98,6 +99,14 @@ public class AccountService implements UserDetailsService {
         account.completeSignUp();
         login(account);
 
+    }
+
+    public void updateProfile(Account account, Profile profile) {
+        account.setUrl(profile.getUrl());
+        account.setOccupation(profile.getOccupation());
+        account.setLocation(profile.getLocation());
+        account.setBio(profile.getBio());
+        accountRepository.save(account);  // 아이디가 있으면 update를 시켜준다.
     }
 }
 

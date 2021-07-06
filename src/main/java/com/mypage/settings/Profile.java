@@ -2,8 +2,10 @@ package com.mypage.settings;
 
 import com.mypage.domain.Account;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Profile {
 
     private String bio;  //프로필 자기소개
