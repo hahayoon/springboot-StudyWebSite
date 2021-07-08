@@ -109,6 +109,11 @@ public class AccountService implements UserDetailsService {
         account.setProfileImage(profile.getProfileImage());
         accountRepository.save(account);  // 아이디가 있으면 update를 시켜준다.
     }
+
+    public void updataPassword(Account account, String newPassword) {
+        account.setPassword(newPassword);
+        accountRepository.save(account);  //detech 되어있기때문에 save 호출해서 영속성 context
+    }
 }
 
 
