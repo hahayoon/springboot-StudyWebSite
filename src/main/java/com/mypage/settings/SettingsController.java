@@ -39,7 +39,7 @@ public class SettingsController {
         }
 
         accountService.updateProfile(account,profile);
-        attributes.addFlashAttribute("message","프로필을 수정했습니다. ");
+        attributes.addFlashAttribute("message","프로필을 수정했습니다. "); //html에 model로 전송 한번쓰고 사라짐
         return "redirect:" + "/settings/profile";
     }
 }

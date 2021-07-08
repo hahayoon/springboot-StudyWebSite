@@ -1,0 +1,6 @@
+프로필 이미지 추가 수정
+>>cd src\main\resources\static
+>>npm install cropper
+>>npm install jquery-cropper
+
+
